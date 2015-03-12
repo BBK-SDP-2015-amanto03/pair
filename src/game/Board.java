@@ -1,3 +1,4 @@
+package game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,9 +82,16 @@ public class Board {
      * Throw an IllegalArgumentException if move's column is full on this Board.
      */
     public void makeMove(Move move) {
-        // TODO
-        // Delete the following code once you've decided to start implementing
-        // throw new UnsupportedOperationException("You need to implement makeMove before running the game.");
+        int col = move.getColumn();
+        assert 0 <= col && col < NUM_COLS;
+        for (int row = NUM_ROWS - 1; row >= 0; row--) {
+            if (board[row][col] == null) {
+                board[row][col] = move.getPlayer();
+                return;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "Illegal Move: Cannot place disc in full column. Try again.");
     }
 
     /**
@@ -97,8 +105,16 @@ public class Board {
      * array of length 0.
      */
     public Move[] getPossibleMoves(Player p) {
-        // TODO
-        return null;
+        // If the game is over no moves are possible
+        if (hasConnectFour() != null) return new Move[]{};
+        // As long as the top row (0) is empty the move is possible.
+        List<Move> possibleMoves = new ArrayList<>();
+        for (int col = 0; col < NUM_COLS; col++) {
+            if (board[0][col] == null) {
+                possibleMoves.add(new Move(p, col));
+            }
+        }
+        return possibleMoves.toArray(new Move[]{});
     }
 
     /**

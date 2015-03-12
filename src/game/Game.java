@@ -1,3 +1,4 @@
+package game;
 
 /**
  * Runs the Connect Four game.
@@ -29,8 +30,8 @@ public class Game {
          * see in the comments after these two assignments. In those assignments,
          * the second argument of the constructor is the depth to which AI
          * searches the game space. */
-        Solver p1 = new Dummy(Player.RED);
-        Solver p2 = new Dummy(Player.YELLOW);
+        Solver p1 = new Human(Player.RED);
+        Solver p2 = new AI(Player.YELLOW, 5);
 
         // Solver p1= new AI(Board.Player.RED, 5);
         // Solver p2= new AI(Board.Player.YELLOW, 5);
@@ -118,6 +119,9 @@ public class Game {
          * *** We will not look at this class anyway ***/
     }
 
+    public Player getWinner() {
+        return winner;
+    }
 
     /** ************** Do not change anything below here ***************/
 
@@ -214,7 +218,7 @@ public class Game {
     }
 
     /**
-     * Return true iff this game is over. If the game
+     * Return true if this game is over. If the game
      * is over, set the winner field to the winner; if no winner
      * set the winner to null.
      */

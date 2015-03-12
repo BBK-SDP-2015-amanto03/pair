@@ -1,3 +1,4 @@
+package game;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -31,12 +32,12 @@ public class GUI extends JFrame {
          * a player parameter; the AI constructor has a player and depth
          * as parameters, with the a depth used to recurse when searching the
          * game space. */
-        //Solver p1= new AI(Player.RED, 6);
-        //Solver p2= new Human(Player.YELLOW);
-        Solver p1 = new Dummy(Player.RED);
-        Solver p2 = new Dummy(Player.YELLOW);
-        //Solver p1 = new Human(Player.RED);
+        Solver p1= new AI(Player.RED, 5);
+        Solver p2= new Human(Player.YELLOW);
+        //Solver p1 = new Dummy(Player.RED);
         //Solver p2 = new Dummy(Player.YELLOW);
+        //Solver p1 = new Human(Player.RED);
+        //Solver p2 = new Human(Player.YELLOW);
 
         /* --------------------------------- Do not change below here. --------------------------------- */
 

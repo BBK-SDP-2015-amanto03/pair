@@ -1,7 +1,10 @@
+package game;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An instance represents the state of a game of Connect Four.
@@ -102,15 +105,22 @@ public class State implements Comparable<Object> {
     }
 
     /**
-     * Retrieves the possible moves and initializes this State's children.
+     * Retrieves the possible moves and initialises this State's children.
      * The result is that this State's children reflect the possible
      * States that can exist after the next move. Remember, in the
      * children it is the opposite player's turn. This method
-     * initializes only this State's children; it does not recursively
-     * initialize all descendants.
+     * Initialises only this State's children; it does not recursively
+     * Initialise all descendants.
      */
     public void initializeChildren() {
-        // TODO
+        Move[] possibleMoves = board.getPossibleMoves(getPlayer().opponent());
+        List<State> children = new ArrayList<>();
+        for (Move move : possibleMoves) {
+            Board boardWithMove = new Board(board, move);
+            Player movePlayer = move.getPlayer();
+            children.add(new State(movePlayer, boardWithMove, move));
+        }
+        setChildren(children.toArray(new State[]{})); 
     }
 
     /**
@@ -165,6 +175,6 @@ public class State implements Comparable<Object> {
     public int compareTo(Object ob) {
         // NOTE: this does not work! If you wish to use any sorting
         // method from the Java API, you must implement this.
-        return 0;
+        return Integer.compare(value, ((State)ob).value);
     }
 }

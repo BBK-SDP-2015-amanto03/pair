@@ -1,4 +1,7 @@
+package game;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,8 +31,10 @@ public class AI implements Solver {
      */
     @Override
     public Move[] getMoves(Board b) {
-        // TODO
-        return null;
+        State currentState = new State(player, b, null);
+        createGameTree(currentState, depth);
+        minimax(this, currentState);
+        return new Move[]{Collections.max(Arrays.asList(currentState.getChildren())).getLastMove()};
     }
 
     /**
@@ -44,10 +49,13 @@ public class AI implements Solver {
      * Note: If s has a winner (four in a row), it should be a leaf.
      */
     public static void createGameTree(State s, int d) {
-        // Note: This method must be recursive, recurse on d,
-        // which should get smaller with each recursive call
-
-        // TODO
+        int currentDepth = d;
+        if (currentDepth == 0) return;
+        s.initializeChildren();
+        currentDepth--;
+        for (State child : s.getChildren()) {
+            createGameTree(child, currentDepth);
+        }
     }
 
     /**
@@ -63,7 +71,21 @@ public class AI implements Solver {
      * tree rooted at s, indicating how desirable that java.State is to this player.
      */
     public void minimax(State s) {
-        // TODO
+        State[] children = s.getChildren();
+        if (children == State.length0) {
+            s.setValue(evaluateBoard(s.getBoard()));
+        } else {
+            for (State child : children) {
+                minimax(child);
+            }
+            int value;
+            if (s.getPlayer() == player) {
+                value = Collections.min(Arrays.asList(children)).getValue();
+            } else {
+                value = Collections.max(Arrays.asList(children)).getValue();
+            }
+            s.setValue(value);
+        }
     }
 
     /**

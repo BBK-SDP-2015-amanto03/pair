@@ -1,3 +1,4 @@
+package game;
 
 /**
  * The two opposing players. A null Player value in board
