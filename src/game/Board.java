@@ -111,16 +111,22 @@ public class Board {
      * array of length 0.
      */
     public Move[] getPossibleMoves(Player p) {
-        // If the game is over no moves are possible
+        // If the game is over no moves are possible.
         if (hasConnectFour() != null) return NO_MOVES;
-        // As long as the top row (0) is empty the move is possible.
+        // Create dynamic array list.
         List<Move> possibleMoves = new ArrayList<>();
         for (int col = 0; col < NUM_COLS; col++) {
+            // As long as the top row (0) is empty the move is possible.
             if (board[0][col] == null) {
                 possibleMoves.add(new Move(p, col));
             }
         }
-        return possibleMoves.toArray(NO_MOVES);
+        // Return as basic array.
+        Move[] returnedArray = new Move[possibleMoves.size()];
+        for (int i = 0; i < returnedArray.length; i++) {
+            returnedArray[i] = possibleMoves.get(i);
+        }
+        return returnedArray;
     }
 
     /**
