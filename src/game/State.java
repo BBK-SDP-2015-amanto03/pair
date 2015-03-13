@@ -45,7 +45,7 @@ public class State implements Comparable<Object> {
 
     /**
      * Constructor: a game State consisting of board b, with player player
-     * to play next; lm is the last Move made on this game --null
+     * to play next; lm is the last Move made on this game -- null
      * if the user does not care what the last move made was.
      */
     public State(Player p, Board b, Move lm) {
@@ -113,12 +113,11 @@ public class State implements Comparable<Object> {
      * Initialise all descendants.
      */
     public void initializeChildren() {
-        Move[] possibleMoves = board.getPossibleMoves(getPlayer().opponent());
+        Move[] possibleMoves = board.getPossibleMoves(player);
         List<State> children = new ArrayList<>();
         for (Move move : possibleMoves) {
-            Board boardWithMove = new Board(board, move);
-            Player movePlayer = move.getPlayer();
-            children.add(new State(movePlayer, boardWithMove, move));
+            Board possibleBoard = new Board(board, move);
+            children.add(new State(player.opponent(), possibleBoard, move));
         }
         setChildren(children.toArray(new State[]{})); 
     }

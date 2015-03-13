@@ -30,8 +30,8 @@ public class Game {
          * see in the comments after these two assignments. In those assignments,
          * the second argument of the constructor is the depth to which AI
          * searches the game space. */
-        Solver p1 = new Human(Player.RED);
-        Solver p2 = new AI(Player.YELLOW, 5);
+        Solver p1 = new AI(Player.RED, 5);
+        Solver p2 = new Human(Player.YELLOW);
 
         // Solver p1= new AI(Board.Player.RED, 5);
         // Solver p2= new AI(Board.Player.YELLOW, 5);

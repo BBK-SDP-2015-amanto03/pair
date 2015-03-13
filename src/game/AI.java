@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +11,12 @@ import java.util.List;
  */
 public class AI implements Solver {
 
-    private Player player; // the current player
+    private final Player player; // the current player
 
     /**
      * The depth of the search in the game space when evaluating moves.
      */
-    private int depth;
+    private final int depth;
 
     /**
      * Constructor: an instance with player p who searches to depth d
@@ -31,10 +32,21 @@ public class AI implements Solver {
      */
     @Override
     public Move[] getMoves(Board b) {
+        // Get the current state of affairs. We're going to play but 
+        // we don't know what the last move was.
         State currentState = new State(player, b, null);
+        // Create the game tree.
         createGameTree(currentState, depth);
+        // Evaluate the tree
         minimax(this, currentState);
-        return new Move[]{Collections.max(Arrays.asList(currentState.getChildren())).getLastMove()};
+        // Return all children with the best move value (there could be more than one).
+        List<Move> bestMoves = new ArrayList<>();
+        int bestMoveValue = currentState.getValue();
+        for (State state : currentState.getChildren()) {
+            if (state.getValue() == bestMoveValue)
+                bestMoves.add(state.getLastMove());
+        }
+        return bestMoves.toArray(new Move[]{});
     }
 
     /**
@@ -49,12 +61,10 @@ public class AI implements Solver {
      * Note: If s has a winner (four in a row), it should be a leaf.
      */
     public static void createGameTree(State s, int d) {
-        int currentDepth = d;
-        if (currentDepth == 0) return;
+        if (d == 0) return;
         s.initializeChildren();
-        currentDepth--;
         for (State child : s.getChildren()) {
-            createGameTree(child, currentDepth);
+            createGameTree(child, d - 1);
         }
     }
 
@@ -72,20 +82,30 @@ public class AI implements Solver {
      */
     public void minimax(State s) {
         State[] children = s.getChildren();
+        // If we have a leaf node then evaluate the board at this point.
         if (children == State.length0) {
             s.setValue(evaluateBoard(s.getBoard()));
-        } else {
+            return;
+        }
+        // Otherwise evaluate the children to derive this node's value.
+        int value;
+        if (s.getPlayer() == player) {
+            // If we are playing find the maximum value.
+            value = Integer.MIN_VALUE;
             for (State child : children) {
                 minimax(child);
+                if (child.getValue() > value) value = child.getValue();
             }
-            int value;
-            if (s.getPlayer() == player) {
-                value = Collections.min(Arrays.asList(children)).getValue();
-            } else {
-                value = Collections.max(Arrays.asList(children)).getValue();
+        } else {
+            // Otherwise find the minimum value.
+            value = Integer.MAX_VALUE;
+            for (State child : children) {
+                minimax(child);
+                if (child.getValue() < value) value = child.getValue();
             }
-            s.setValue(value);
         }
+        // Set the value we derived.
+        s.setValue(value);
     }
 
     /**
