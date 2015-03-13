@@ -19,6 +19,8 @@ public class Board {
     public static final int NUM_COLS = 7;
 
     private static final int FOUR = 4; // four in a line
+    
+    private static final Move[] NO_MOVES = new Move[]{};
 
     /**
      * vertical, horizontal, uphill, downhill, directions from any position
@@ -82,6 +84,10 @@ public class Board {
      * Throw an IllegalArgumentException if move's column is full on this Board.
      */
     public void makeMove(Move move) {
+        
+        if(getPossibleMoves(move.getPlayer()) == NO_MOVES)
+            throw new UnsupportedOperationException("Illegal Move: The game is over.");
+        
         int col = move.getColumn();
         assert 0 <= col && col < NUM_COLS;
         for (int row = NUM_ROWS - 1; row >= 0; row--) {
@@ -106,7 +112,7 @@ public class Board {
      */
     public Move[] getPossibleMoves(Player p) {
         // If the game is over no moves are possible
-        if (hasConnectFour() != null) return new Move[]{};
+        if (hasConnectFour() != null) return NO_MOVES;
         // As long as the top row (0) is empty the move is possible.
         List<Move> possibleMoves = new ArrayList<>();
         for (int col = 0; col < NUM_COLS; col++) {
@@ -114,7 +120,7 @@ public class Board {
                 possibleMoves.add(new Move(p, col));
             }
         }
-        return possibleMoves.toArray(new Move[]{});
+        return possibleMoves.toArray(NO_MOVES);
     }
 
     /**
