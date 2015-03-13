@@ -13,7 +13,7 @@ public class Game {
     private Player winner;  // null
 
     //Change this if you would like a delay between plays
-    private static final long SLEEP_INTERVAL = 10; //in milliseconds
+    private static final long SLEEP_INTERVAL = 100; //in milliseconds
 
     /**
      * Have the computer play against itself, putting output int the default

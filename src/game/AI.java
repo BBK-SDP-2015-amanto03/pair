@@ -83,7 +83,7 @@ public class AI implements Solver {
     public void minimax(State s) {
         State[] children = s.getChildren();
         // If we have a leaf node then evaluate the board at this point.
-        if (children == State.length0) {
+        if (children.length == 0) {
             s.setValue(evaluateBoard(s.getBoard()));
             return;
         }
