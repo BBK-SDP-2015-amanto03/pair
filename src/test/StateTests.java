@@ -19,7 +19,7 @@ public class StateTests {
         for (int i = 0; i < 4; i++) {
             board.makeMove(new Move(Player.RED, 1));
         }
-        State state = new State(Player.YELLOW,board,null);
+        State state = new State(Player.YELLOW, board, null);
         state.initializeChildren();
         assertEquals(0, state.getChildren().length);
     }

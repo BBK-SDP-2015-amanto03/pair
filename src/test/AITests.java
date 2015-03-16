@@ -6,6 +6,7 @@ import game.Board;
 import game.Move;
 import game.Player;
 import game.Solver;
+import game.State;
 
 import org.junit.Test;
 
@@ -59,5 +60,35 @@ public class AITests {
         assertTrue(moves[0].getPlayer() == Player.RED);
         assertTrue(moves[0].getColumn() == 3);
     }
+    
+    /**
+     * Test the game tree creates a leaf node on a winning game.
+     */
+    @Test
+    public void testWinningStateIsLeafNode() {
+        Board board = new Board();
+        // Set up a winning board.
+        board.makeMove(new Move(Player.YELLOW, 0));
+        board.makeMove(new Move(Player.RED, 0));
+        board.makeMove(new Move(Player.YELLOW, 1));
+        board.makeMove(new Move(Player.RED, 0));
+        board.makeMove(new Move(Player.YELLOW, 2));
+        board.makeMove(new Move(Player.RED, 0));
+        board.makeMove(new Move(Player.YELLOW, 3));
+        assertTrue(board.hasConnectFour().equals(Player.YELLOW));
+        State winningState = new State(Player.RED, board, null);
+        AI.createGameTree(winningState, 100);
+        assertTrue(winningState.getChildren().length == 0);
+    }
+    
+    /**
+     * Confirm Null Pointer Exception on getMoves with null board.
+     */
+    @Test(expected=NullPointerException.class)
+    public void testNullPointerOnNullBoard() {
+        Solver ai = new AI(Player.RED, 10);
+        ai.getMoves(null);
+    }
+    
     
 }

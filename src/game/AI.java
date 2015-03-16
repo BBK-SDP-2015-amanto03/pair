@@ -32,21 +32,25 @@ public class AI implements Solver {
      */
     @Override
     public Move[] getMoves(Board b) {
-        // Get the current state of affairs. We're going to play but 
-        // we don't know what the last move was.
+        // Test precondition
+        if (b == null)
+            throw new NullPointerException();
+        // Get the current state of affairs.
+        // We're going to play but we don't know what the last move was.
         State currentState = new State(player, b, null);
         // Create the game tree.
         createGameTree(currentState, depth);
         // Evaluate the tree
         minimax(this, currentState);
-        // Return all children with the best move value (there could be more than one).
+        // Return all children with the best move value (there could be more
+        // than one).
         List<Move> bestMoves = new ArrayList<>();
         int bestMoveValue = currentState.getValue();
         for (State state : currentState.getChildren()) {
             if (state.getValue() == bestMoveValue)
                 bestMoves.add(state.getLastMove());
         }
-        return bestMoves.toArray(new Move[]{});
+        return bestMoves.toArray(new Move[] {});
     }
 
     /**
@@ -90,14 +94,14 @@ public class AI implements Solver {
         // Otherwise evaluate the children to derive this node's value.
         int value;
         if (s.getPlayer() == player) {
-            // If we are playing find the maximum value.
+            // If we are playing find the maximum value of our child states.
             value = Integer.MIN_VALUE;
             for (State child : children) {
                 minimax(child);
                 if (child.getValue() > value) value = child.getValue();
             }
         } else {
-            // Otherwise find the minimum value.
+            // Otherwise find the minimum value of our child states.
             value = Integer.MAX_VALUE;
             for (State child : children) {
                 minimax(child);
