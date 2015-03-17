@@ -113,13 +113,26 @@ public class State implements Comparable<Object> {
      * Initialise all descendants.
      */
     public void initializeChildren() {
+        /*
+         * Get the possible moves on this state's board.
+         */
         Move[] possibleMoves = board.getPossibleMoves(player);
+        /*
+         * For each of the possible moves create a new state object child by 
+         *  - creating a new board based on the current one
+         *  - applying the new possible move
+         *  - marking the new state's player as the current player's opponent.
+         *  All of the above can be achieved with the correct State constructor.
+         */
         List<State> children = new ArrayList<>();
         for (Move move : possibleMoves) {
             Board possibleBoard = new Board(board, move);
             children.add(new State(player.opponent(), possibleBoard, move));
         }
-        setChildren(children.toArray(new State[]{})); 
+        /*
+         * Set this state's children to the array of possible next states.
+         */
+       setChildren(children.toArray(new State[]{})); 
     }
 
     /**

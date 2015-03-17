@@ -85,9 +85,17 @@ public class Board {
      */
     public void makeMove(Move move) {
         
+        /*
+         * If there are no possible moves then the game is over.
+         */
         if(getPossibleMoves(move.getPlayer()) == NO_MOVES)
             throw new UnsupportedOperationException("Illegal Move: The game is over.");
         
+        /*
+         * Otherwise play the move into the designated column by finding the
+         * first empty slot from bottom to top and putting the move's player in
+         * that empty slot.
+         */
         int col = move.getColumn();
         assert 0 <= col && col < NUM_COLS;
         for (int row = NUM_ROWS - 1; row >= 0; row--) {
@@ -96,6 +104,9 @@ public class Board {
                 return;
             }
         }
+        /*
+         * If we haven't found a slot for the player then the column was full.
+         */
         throw new UnsupportedOperationException(
                 "Illegal Move: Cannot place disc in full column. Try again.");
     }
@@ -111,17 +122,25 @@ public class Board {
      * array of length 0.
      */
     public Move[] getPossibleMoves(Player p) {
-        // If the game is over no moves are possible.
+        /*
+         * If the game is over no moves are possible.
+         */
         if (hasConnectFour() != null) return NO_MOVES;
-        // Create dynamic array list.
+        /*
+         * Otherwise create dynamic array list for the possible moves.
+         */
         List<Move> possibleMoves = new ArrayList<>();
+        /*
+         * For each column if the top row (0) is empty then a move is possible.
+         */
         for (int col = 0; col < NUM_COLS; col++) {
-            // As long as the top row (0) is empty the move is possible.
             if (board[0][col] == null) {
                 possibleMoves.add(new Move(p, col));
             }
         }
-        // Return as basic array.
+        /*
+         * Convert dynamic array to static array and return it.
+         */
         Move[] returnedArray = new Move[possibleMoves.size()];
         for (int i = 0; i < returnedArray.length; i++) {
             returnedArray[i] = possibleMoves.get(i);
